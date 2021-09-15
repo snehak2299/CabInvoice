@@ -7,37 +7,31 @@ import org.junit.Test;
 import com.bridglab.invoice.InvoiceGenerator;
 import com.bridglab.invoice.InvoiceSummary;
 import com.bridglab.invoice.Rides;
+import com.bridglab.invoice.ServiceType;
 
 public class InvoiceService {
 	
 	@Test
-	public void givenDistanceTime_shouldReturnFare() {
-		InvoiceGenerator invoiceGenerator=new InvoiceGenerator();
-		double distance = 2.0;
-		int time = 5;
-		double fare=invoiceGenerator.calculateFare(distance,time);
-		Assert.assertEquals(25, fare,0.0);
-		
+	public void shouldReturnTotalFare() {
+		InvoiceGenerator invoiceGenerator = new InvoiceGenerator(1.0,1,ServiceType.NORMAL_RIDE);
+		Assert.assertEquals(11.0, invoiceGenerator.calculateFare(),0.0);
 	}
 	@Test
-	public void givenDistanceTime_minimumFare_shouldReturnFare() {
-		InvoiceGenerator invoiceGenerator=new InvoiceGenerator();
-		double distance = 0.1;
-		int time = 1;
-		double fare=invoiceGenerator.calculateFare(distance,time);
-		Assert.assertEquals(5, fare,0.0);
-		
+	public void shouldReturnTotalFare_forPrimiumRide() {
+		InvoiceGenerator invoiceGenerator = new InvoiceGenerator(1.0,1,ServiceType.PERIMIUM_RIDE);
+		Assert.assertEquals(22.0, invoiceGenerator.calculateFare(),0.0);
 	}
+	
+	
 	@Test
     public void givenMultipleRides_ShouldReturnInvoiceSummary() {
-		InvoiceGenerator invoiceGenerator=new InvoiceGenerator();
+		InvoiceGenerator invoiceGenerator=new InvoiceGenerator(1.0,1,ServiceType.PERIMIUM_RIDE);
         Rides[] ride1={new Rides(2.0,1,5),new Rides(0.1,1,1)};
         Rides[] ride2={new Rides(2,4,6),new Rides(2,2,3),new Rides(2,5,6)};
         InvoiceSummary fare1=invoiceGenerator.calculateFare(ride1);
-        Assert.assertEquals("InvoiceSummary{noOfRides=2, totalFare=30.0, averageFare=15.0}",fare1);
-
+        Assert.assertEquals("InvoiceSummary [noOfRides= 2 , totalFare= 44 , averageFare=22 ]",fare1);      
         InvoiceSummary fare2=invoiceGenerator.calculateFare(ride2);
-       Assert.assertEquals("InvoiceSummary{noOfRides=3, totalFare=125.0, averageFare=41.666666666666664}",fare2);
+        Assert.assertEquals("InvoiceSummary [noOfRides= 3 , totalFare= 64 , averageFare=46.666 ]",fare2);
 
     }
 }
